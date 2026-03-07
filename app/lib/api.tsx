@@ -50,7 +50,7 @@ export async function deleteNoteService(id: string): Promise<Note> {
 // Отримання деталей однієї нотатки за її ідентифікатором. 
 export async function fetchNoteById(id: string): Promise<Note> {
   try {
-    const res = await axios.get<NotesResponse>(`/notes/${id}`);
+    const res = await axios.get<Note>(`/notes/${id}`);
     return res.data;
   } catch (err) {
     if (axios.isAxiosError(err)) {

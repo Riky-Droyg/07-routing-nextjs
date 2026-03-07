@@ -1,4 +1,4 @@
-import { deleteNoteService, fetchNoteById } from "@/app/lib/api";
+import { deleteNoteService } from "@/app/lib/api";
 import css from "./NoteList.module.css";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Note } from "@/app/types/types";
