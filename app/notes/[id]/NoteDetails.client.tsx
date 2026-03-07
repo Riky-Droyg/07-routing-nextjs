@@ -6,18 +6,25 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchNoteById } from "@/lib/api";
 
 export default function NoteDetailsClient({ id }: { id: string }) {
-
-  const { data: note, isLoading } = useQuery<Note>({
+  const { data: note, isLoading, isError, error } = useQuery<Note>({
     queryKey: ["note", id],
     queryFn: () => fetchNoteById(id),
     staleTime: 60_000,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
-
   });
 
   if (isLoading) return <p>Loading...</p>;
-  if (!note) return null;
+
+  if (isError) {
+    return (
+      <p className={css.error}>
+        Could not fetch the note. {(error as Error).message}
+      </p>
+    );
+  }
+
+  if (!note) return <p>Note not found.</p>;
 
   return (
     <div className={css.container}>
