@@ -15,7 +15,7 @@ function NoteList({ notes }: NoteListProps) {
 		mutationFn: async (id: string) => deleteNoteService(id),
 
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["myQueryKey"] });
+			queryClient.invalidateQueries({ queryKey: ["note"] });
 		},
 	});
 	const elListNotes = notes?.map((el) => {
@@ -29,7 +29,7 @@ function NoteList({ notes }: NoteListProps) {
 
 				<div className={css.footer}>
 					<span className={css.tag}>{el.tag}</span>
-					<Link href={`notes/${el.id}`} aria-label="View details">View details</Link>
+					<Link href={`/notes/${el.id}`} aria-label="View details">View details</Link>
 					<button
 						className={css.button}
 						type="button"

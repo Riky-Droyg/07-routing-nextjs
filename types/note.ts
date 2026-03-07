@@ -15,7 +15,3 @@ export type NoteFormData = {
 	tag: Tag;
 };
 
-export interface NotesResponse {
-	notes: Note[];
-	totalPages: number;
-}

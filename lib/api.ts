@@ -1,8 +1,13 @@
 import axios from "axios";
-import { Note, NoteFormData, NotesResponse } from "../types/note";
+import { Note, NoteFormData } from "../types/note";
 
 axios.defaults.baseURL = "https://notehub-public.goit.study/api";
 axios.defaults.headers.common.Authorization = `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`;
+
+export interface NotesResponse {
+	notes: Note[];
+	totalPages: number;
+}
 
 export async function noteService(query: string, page: number): Promise<NotesResponse> {
 	try {
