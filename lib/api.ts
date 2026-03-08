@@ -9,14 +9,15 @@ export interface NotesResponse {
 	totalPages: number;
 }
 
-export async function noteService(query: string, page: number): Promise<NotesResponse> {
+export async function noteService(query: string, page: number, tag?: string): Promise<NotesResponse> {
 	try {
 		const q = query.trim();
 
 		const res = await axios.get<NotesResponse>("/notes", {
 			params: {
-				page, // ✅ завжди
-				...(q ? { search: q } : {}), // ✅ search тільки якщо є
+				page,
+				...(q ? { search: q } : {}),
+				...(tag ? { tag } : {}),
 			},
 		});
 
@@ -56,22 +57,6 @@ export async function deleteNoteService(id: string): Promise<Note> {
 export async function fetchNoteById(id: string): Promise<Note> {
 	try {
 		const res = await axios.get<Note>(`/notes/${id}`);
-		return res.data;
-	} catch (err) {
-		if (axios.isAxiosError(err)) {
-			throw new Error((err.response?.data as any)?.status_message ?? err.message);
-		}
-		throw err;
-	}
-}
-
-export async function fetchNoteByTag(tag?: string): Promise<NotesResponse> {
-	try {
-		const res = await axios.get<NotesResponse>(`/notes`, {
-			params: {
-				...(tag ? { tag } : {}),
-			},
-		});
 		return res.data;
 	} catch (err) {
 		if (axios.isAxiosError(err)) {
