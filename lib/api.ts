@@ -64,3 +64,19 @@ export async function fetchNoteById(id: string): Promise<Note> {
 		throw err;
 	}
 }
+
+export async function fetchNoteByTag(tag?: string): Promise<NotesResponse> {
+	try {
+		const res = await axios.get<NotesResponse>(`/notes`, {
+			params: {
+				...(tag ? { tag } : {}),
+			},
+		});
+		return res.data;
+	} catch (err) {
+		if (axios.isAxiosError(err)) {
+			throw new Error((err.response?.data as any)?.status_message ?? err.message);
+		}
+		throw err;
+	}
+}
