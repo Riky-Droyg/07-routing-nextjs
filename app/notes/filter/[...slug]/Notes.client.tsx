@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { noteService } from "@/lib/api";
-import type { Note } from "@/types/note";
 import NoteList from "@/components/NoteList/NoteList";
 import Pagination from "@/components/Pagination/Pagination";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import Modal from "@/components/Modal/Modal";
+import NoteForm from "@/components/NoteForm/NoteForm";
 
 type Props = {
   tag?: string;
@@ -18,12 +18,10 @@ export default function Notes({ tag }: Props) {
   const [inputValue, setInputValue] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedNote, setSelectedNote] = useState<Note | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(inputValue);
-      setPage(1);
     }, 500);
 
     return () => clearTimeout(timer);
@@ -37,20 +35,19 @@ export default function Notes({ tag }: Props) {
 
   const handleSearch = (value: string) => {
     setInputValue(value);
+    setPage(1);
   };
 
   const handlePageChange = (selectedPage: number) => {
     setPage(selectedPage);
   };
 
-  const openModal = (note: Note) => {
-    setSelectedNote(note);
+  const openModal = () => {
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setSelectedNote(null);
   };
 
   if (isLoading) return <p>Loading...</p>;
@@ -63,10 +60,14 @@ export default function Notes({ tag }: Props) {
     <>
       <SearchBox value={inputValue} onChange={handleSearch} />
 
+      <button type="button" onClick={openModal}>
+        Create note +
+      </button>
+
       {!data?.notes?.length ? (
         <p>No notes found.</p>
       ) : (
-        <NoteList notes={data.notes} onOpen={openModal} />
+        <NoteList notes={data.notes} />
       )}
 
       {data && data.totalPages > 1 && (
@@ -77,13 +78,11 @@ export default function Notes({ tag }: Props) {
         />
       )}
 
-      {isModalOpen && selectedNote && (
-        <Modal closeModal={closeModal}>
-          <h2>{selectedNote.title}</h2>
-          <p>{selectedNote.content}</p>
-          <p>{selectedNote.tag}</p>
+      {isModalOpen && (
+        <Modal onClose={closeModal}>
+          <NoteForm closeModal={closeModal} />
         </Modal>
       )}
     </>
   );
-} 
+}

@@ -8,10 +8,9 @@ import Link from "next/link";
 
 type NoteListProps = {
   notes: Note[];
-  onOpen?: (note: Note) => void;
 };
 
-function NoteList({ notes, onOpen }: NoteListProps) {
+function NoteList({ notes }: NoteListProps) {
   const queryClient = useQueryClient();
 
   const deleteNote = useMutation({
@@ -31,19 +30,9 @@ function NoteList({ notes, onOpen }: NoteListProps) {
           <div className={css.footer}>
             <span className={css.tag}>{el.tag}</span>
 
-            {onOpen ? (
-              <button
-                type="button"
-                className={css.button}
-                onClick={() => onOpen(el)}
-              >
-                View details
-              </button>
-            ) : (
-              <Link href={`/notes/${el.id}`} aria-label="View details">
-                View details
-              </Link>
-            )}
+            <Link href={`/notes/${el.id}`} aria-label="View details">
+              View details
+            </Link>
 
             <button
               className={css.button}
