@@ -10,6 +10,7 @@ export default async function NotesByCategory({ params }: Props) {
   const { slug } = await params;
 
   const category = slug[0] === "all" ? undefined : slug[0];
+  console.log(category)
   const response = await fetchNoteByTag(category);
 
   return (
